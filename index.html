@@ -378,15 +378,167 @@
     line-height: 1.6;
   }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 360px) {
-    .card-hero h1 { font-size: 30px; }
-    .form-body { padding: 16px 16px 24px; }
-    .returning-body { padding: 20px 16px 20px; }
+  /* ── PRIVACY MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(10,18,40,0.75);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.25s ease both;
   }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  .modal-overlay.hiding { animation: fadeOut 0.2s ease both; }
+  @keyframes fadeOut { from { opacity:1; } to { opacity:0; } }
+  .modal-card {
+    background: white; border-radius: 16px;
+    max-width: 360px; width: 100%;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: popUp 0.3s cubic-bezier(.32,1.4,.49,1) both;
+  }
+  @keyframes popUp {
+    from { transform: scale(0.88) translateY(16px); opacity:0; }
+    to   { transform: scale(1) translateY(0); opacity:1; }
+  }
+  .modal-header {
+    background: var(--blue); padding: 18px 20px 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .modal-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: rgba(255,255,255,0.15); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .modal-header-text h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 900;
+    color: white; text-transform: uppercase; line-height: 1;
+  }
+  .modal-header-text p { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 3px; }
+  .modal-body { padding: 18px 20px 6px; }
+  .modal-intro { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 14px; line-height: 1.45; }
+  .privacy-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 9px 0; border-bottom: 1px solid var(--border);
+  }
+  .privacy-item:last-child { border-bottom: none; }
+  .pi-icon {
+    width: 30px; height: 30px; flex-shrink: 0;
+    background: #eaf2fd; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; margin-top: 1px;
+  }
+  .pi-text { font-size: 12.5px; color: var(--text); line-height: 1.45; }
+  .pi-text strong { display: block; font-weight: 600; color: var(--navy); margin-bottom: 1px; }
+  .modal-footer { padding: 14px 20px 18px; }
+  .modal-ok-btn {
+    width: 100%; background: var(--blue); color: white;
+    border: none; border-radius: 10px; padding: 13px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    cursor: pointer; transition: background 0.15s, transform 0.1s;
+    box-shadow: 0 4px 14px rgba(26,86,176,0.3);
+  }
+  .modal-ok-btn:hover  { background: #1248a0; }
+  .modal-ok-btn:active { transform: scale(0.98); }
+  .modal-fine { font-size: 10.5px; color: var(--muted); text-align: center; margin-top: 8px; line-height: 1.5; }
+
+  /* ── SAFETY EXPAND ── */
+  .safety-toggle {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 0 8px;
+    font-size: 12.5px; font-weight: 600;
+    color: var(--blue); cursor: pointer;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+    user-select: none;
+    transition: color 0.15s;
+  }
+  .safety-toggle:hover { color: var(--navy); }
+  .safety-toggle #safetyToggleIcon {
+    font-size: 10px; transition: transform 0.2s;
+    display: inline-block;
+  }
+  .safety-expand {
+    display: none;
+    flex-direction: column;
+    background: #f8faff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 10px;
+    margin-bottom: 6px;
+  }
+  .safety-expand.open { display: flex; }
+  .safety-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+  }
+  .safety-item:last-child { border-bottom: none; }
 </style>
 </head>
 <body>
+
+<!-- ══ PRIVACY MODAL ══ -->
+<div class="modal-overlay" id="privacyModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-icon">🔒</div>
+      <div class="modal-header-text">
+        <h2>Your Privacy</h2>
+        <p>Gemco Players Community Theatre</p>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-intro">Before you check in, here's how we handle your information — simply and honestly.</div>
+      <div class="privacy-item">
+        <div class="pi-icon">📋</div>
+        <div class="pi-text"><strong>Why we collect it</strong>We're required to keep a visitor register under our Victorian liquor licence. That's the only reason.</div>
+      </div>
+      <div class="privacy-item">
+        <div class="pi-icon">🚫</div>
+        <div class="pi-text"><strong>We won't spam you</strong>Your details are never used for marketing, shared with third parties, or sold. Ever.</div>
+      </div>
+      <div class="privacy-item">
+        <div class="pi-icon">📱</div>
+        <div class="pi-text"><strong>Stored on your device</strong>Your details are saved on your phone so you don't have to re-enter them next visit.</div>
+      </div>
+      <div class="privacy-item">
+        <div class="pi-icon">🔐</div>
+        <div class="pi-text"><strong>Secure &amp; private</strong>Check-in records are stored securely and only accessible to authorised Gemco Players members.</div>
+      </div>
+
+      <!-- Expandable safety section -->
+      <div class="safety-toggle" onclick="toggleSafety()">
+        <span id="safetyToggleIcon">▶</span>
+        <span>Why is this safe? Concerned about online forms?</span>
+      </div>
+      <div class="safety-expand" id="safetyExpand">
+        <div class="safety-item">
+          <div class="pi-icon">🇦🇺</div>
+          <div class="pi-text"><strong>Data stays in Australia</strong>Your information is stored in Google Sheets on Google's Australian servers — the same infrastructure used by Australian banks, hospitals, and government agencies.</div>
+        </div>
+        <div class="safety-item">
+          <div class="pi-icon">🔑</div>
+          <div class="pi-text"><strong>No passwords or financial info</strong>We only ask for your name, email, phone and suburb — nothing sensitive. We never ask for passwords, payment details or ID numbers.</div>
+        </div>
+        <div class="safety-item">
+          <div class="pi-icon">👁️</div>
+          <div class="pi-text"><strong>Only authorised members can see it</strong>The register is a private Google Sheet accessible only to authorised Gemco Players members — not the public.</div>
+        </div>
+        <div class="safety-item">
+          <div class="pi-icon">📜</div>
+          <div class="pi-text"><strong>It's the law</strong>Visitor registers are a legal requirement under the <em>Liquor Control Reform Act 1998</em> (Vic). Paper registers carry the same information — this is simply a digital version.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-ok-btn" onclick="closePrivacyModal()">Got It, Let's Check In</button>
+      <div class="modal-fine">By checking in you agree to the collection of your details for liquor licence compliance purposes only.</div>
+    </div>
+  </div>
+</div>
 
 <header class="site-header">
   <div class="brand">
@@ -520,7 +672,70 @@
       <div class="success-title" id="successTitle">Checked In!</div>
       <div class="success-sub" id="successSub">Welcome to The Gem. Enjoy your visit!</div>
       <div class="success-time" id="successTime"></div>
-      <button class="done-btn" onclick="handleDone()">Done</button>
+      <div style="font-size:13px; color:#5a6a8a; text-align:center; line-height:1.5;">
+        You can now <strong>close this window</strong> or simply put your phone away. 👋
+      </div>
+
+      <!-- Member pitch -->
+      <div style="background:linear-gradient(135deg,#0d1b3e 0%,#1a3870 100%); border-radius:12px; padding:16px; text-align:center; width:100%;">
+
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.15em; margin-bottom:3px;">Support the Arts</div>
+
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:900; color:white; text-transform:uppercase; line-height:1; margin-bottom:2px;">
+          Less than $1 a week.
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:12px;">
+          Become a Gemco Member
+        </div>
+
+        <!-- Perks -->
+        <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:14px; text-align:left;">
+
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.07); border-radius:7px; padding:8px 10px;">
+            <span style="font-size:15px;">🎭</span>
+            <div style="font-size:12px; color:white; line-height:1.3;"><strong>2-for-1 on Opening Nights</strong> — bring a friend for free</div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.07); border-radius:7px; padding:8px 10px;">
+            <span style="font-size:15px;">🏷️</span>
+            <div style="font-size:12px; color:white; line-height:1.3;"><strong>Discounts on events &amp; venue hire</strong></div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.07); border-radius:7px; padding:8px 10px;">
+            <span style="font-size:15px;">🎬</span>
+            <div style="font-size:12px; color:white; line-height:1.3;"><strong>Access to productions &amp; activities</strong> — get involved on &amp; off stage</div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.07); border-radius:7px; padding:8px 10px;">
+            <span style="font-size:15px;">🛡️</span>
+            <div style="font-size:12px; color:white; line-height:1.3;"><strong>Insurance cover</strong> at all Gemco events</div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.07); border-radius:7px; padding:8px 10px;">
+            <span style="font-size:15px;">🗳️</span>
+            <div style="font-size:12px; color:white; line-height:1.3;"><strong>Voting rights</strong> — have a real say in your community theatre</div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.07); border-radius:7px; padding:8px 10px;">
+            <span style="font-size:15px;">🤗</span>
+            <div style="font-size:12px; color:white; line-height:1.3;"><strong>A warm feeling</strong> — knowing you support the arts in Emerald</div>
+          </div>
+
+        </div>
+
+        <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-bottom:10px;">From $15/yr youth · $50/yr adult · $75/yr family — visit website for current pricing</div>
+
+        <a href="https://gemcoplayers.org" target="_blank"
+           style="display:block; background:#2e7fd8; color:white; text-decoration:none;
+                  border-radius:8px; padding:11px 16px;
+                  font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:700;
+                  letter-spacing:0.06em; text-transform:uppercase;">
+          Join Today → gemcoplayers.org
+        </a>
+
+      </div>
+
+      <button class="done-btn" id="btnDone" onclick="handleDone()">Close this window</button>
     </div>
   </div>
 
@@ -656,8 +871,30 @@ let highlightedSuggestion = -1;
 let suburbConfirmed = false;
 let isEditing = false;
 
+// ── PRIVACY MODAL ──
+function closePrivacyModal() {
+  const modal = document.getElementById('privacyModal');
+  modal.classList.add('hiding');
+  setTimeout(() => modal.remove(), 200);
+  try { localStorage.setItem('gemco_privacy_seen', '1'); } catch(e) {}
+}
+
+function toggleSafety() {
+  const expand = document.getElementById('safetyExpand');
+  const icon   = document.getElementById('safetyToggleIcon');
+  const open   = expand.classList.toggle('open');
+  icon.style.transform = open ? 'rotate(90deg)' : 'rotate(0deg)';
+}
+
 // ── INIT ──
 window.addEventListener('load', function() {
+  // Only show privacy modal if not seen before
+  try {
+    if (localStorage.getItem('gemco_privacy_seen')) {
+      document.getElementById('privacyModal').remove();
+    }
+  } catch(e) {}
+
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -691,6 +928,23 @@ function showReturningScreen() {
   const count = profile.visitCount || 1;
   const suffix = count === 1 ? '1st visit' : count === 2 ? '2nd visit' : count === 3 ? '3rd visit' : count + 'th visit';
   document.getElementById('visitCount').textContent = suffix;
+
+  // ── Cooldown check — block re-checkin within 1 hour ──
+  const btn = document.getElementById('btnQuickCheckin');
+  const lastCheckin = profile.lastVisit ? new Date(profile.lastVisit) : null;
+  const cooldownMins = 60;
+  const minsAgo = lastCheckin ? (Date.now() - lastCheckin.getTime()) / 60000 : 999;
+
+  if (minsAgo < cooldownMins) {
+    const checkedAt = lastCheckin.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit', hour12:true });
+    btn.disabled = true;
+    btn.style.background = '#1a8a4a';
+    btn.innerHTML = '✓ Already Checked In at ' + checkedAt;
+  } else {
+    btn.disabled = false;
+    btn.style.background = '';
+    btn.innerHTML = 'Confirm Check-In';
+  }
 
   document.getElementById('heroTitle').innerHTML = 'Welcome<br>Back!';
   showScreen('screenReturning');
@@ -1056,11 +1310,15 @@ function showSuccessScreen(p, now) {
     now.toLocaleDateString('en-AU', { weekday:'long', day:'numeric', month:'long' });
   document.getElementById('heroTitle').innerHTML = p.visitCount > 1 ? 'Welcome<br>Back!' : 'You\'re<br>In!';
   showScreen('screenSuccess');
+
+  // Update the done button text
+  document.getElementById('btnDone').textContent = 'Close this window';
+
+  // Auto-return to locked check-in screen after 4 seconds
+  setTimeout(() => handleDone(), 4000);
 }
 
 function handleDone() {
-  // Return to returning screen (they're now registered)
-  document.getElementById('heroTitle').innerHTML = 'Welcome<br>Back!';
   showReturningScreen();
 }
 </script>
